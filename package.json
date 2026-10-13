@@ -4,14 +4,29 @@
   "private": true,
   "description": "Playwright end-to-end tests for the WINETIME product page",
   "scripts": {
+    "pretest": "npm run matrix:check",
+    "pretest:p1": "npm run matrix:check",
+    "pretest:p2": "npm run matrix:check",
+    "pretest:p3": "npm run matrix:check",
+    "pretest:p1-p2": "npm run matrix:check",
+    "pretest:smoke": "npm run matrix:check",
+    "pretest:headed": "npm run matrix:check",
+    "pretest:ui": "npm run matrix:check",
     "test": "playwright test",
+    "test:p1": "playwright test --grep @P1",
+    "test:p2": "playwright test --grep @P2",
+    "test:p3": "playwright test --grep @P3",
+    "test:p1-p2": "playwright test --grep \"@P1|@P2\"",
     "test:smoke": "playwright test --grep @smoke",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
+    "matrix": "node scripts/generate-matrix.js",
+    "matrix:check": "node utils/validate-matrix.js",
     "report": "playwright show-report"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",
-    "@playwright/test": "^1.56.1"
+    "@playwright/test": "^1.56.1",
+    "csv-parse": "^7.0.3"
   }
 }

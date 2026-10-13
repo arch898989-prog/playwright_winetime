@@ -5,6 +5,8 @@ const { CartPage } = require("../pages/CartPage");
 const { HeaderComponent } = require("../pages/HeaderComponent");
 const { FooterComponent } = require("../pages/FooterComponent");
 const { dismissAgePopup, dismissPopups } = require("../utils/popups");
+const { getTags, getTestMeta } = require("../utils/matrix");
+const { attachElementScreenshot } = require("../utils/test-evidence");
 
 async function loadProduct(page) {
   const response = await page.goto(product.url, { waitUntil: "domcontentloaded" });
@@ -45,7 +47,11 @@ test.describe("Product page", () => {
     await dismissPopups(page);
   });
 
-  test("page loads with the expected metadata @smoke", async ({ page }) => {
+  const pageLoadMeta = getTestMeta("TC-004");
+  test(`${pageLoadMeta.id} ${pageLoadMeta.name}`, {
+    tag: [...getTags("TC-004"), "@smoke"],
+    annotation: { type: "description", description: pageLoadMeta.description },
+  }, async ({ page }, testInfo) => {
     const productPage = new ProductPage(page);
     await test.step("Verify successful navigation and SEO metadata", async () => {
       expect(page.navigationStatus).toBe(200);
@@ -60,10 +66,15 @@ test.describe("Product page", () => {
       );
       const ogTitle = await page.locator('meta[property="og:title"]').getAttribute("content");
       expect(ogTitle).toContain(product.name);
+      await attachElementScreenshot(testInfo, productPage.heading, "Product page heading");
     });
   });
 
-  test("header navigation and contact information are visible", async ({ page }, testInfo) => {
+  const headerMeta = getTestMeta("TC-005");
+  test(`${headerMeta.id} ${headerMeta.name}`, {
+    tag: getTags("TC-005"),
+    annotation: { type: "description", description: headerMeta.description },
+  }, async ({ page }, testInfo) => {
     test.skip(testInfo.project.name === "mobile", "Desktop header controls are replaced by the mobile menu");
     const header = new HeaderComponent(page);
     await test.step("Verify logo, menus, locale, contacts, and cart indicator", async () => {
@@ -81,20 +92,32 @@ test.describe("Product page", () => {
         await expect(page.getByText(hours, { exact: false }).first()).toBeVisible();
       }
       await expect(header.login).toBeVisible();
+      await attachElementScreenshot(testInfo, header.root, "Desktop header navigation");
+      await attachElementScreenshot(testInfo, header.phone, "Header phone");
     });
   });
 
-  test("product breadcrumbs point to the expected categories", async ({ page }) => {
+  const breadcrumbsMeta = getTestMeta("TC-006");
+  test(`${breadcrumbsMeta.id} ${breadcrumbsMeta.name}`, {
+    tag: getTags("TC-006"),
+    annotation: { type: "description", description: breadcrumbsMeta.description },
+  }, async ({ page }, testInfo) => {
+    const productPage = new ProductPage(page);
     await test.step("Check parent breadcrumb links and product label", async () => {
       for (const crumb of product.breadcrumbs) {
         const link = page.getByRole("link", { name: crumb.name, exact: true }).first();
         await expect(link).toHaveAttribute("href", new RegExp(`${crumb.href.replaceAll("/", "\\/")}/?$`));
       }
       await expect(page.getByText(product.name, { exact: true }).first()).toBeVisible();
+      await attachElementScreenshot(testInfo, productPage.breadcrumbs, "Product breadcrumbs");
     });
   });
 
-  test("product image, price, characteristics, and availability are visible @smoke", async ({ page }) => {
+  const productDetailsMeta = getTestMeta("TC-007");
+  test(`${productDetailsMeta.id} ${productDetailsMeta.name}`, {
+    tag: [...getTags("TC-007"), "@smoke"],
+    annotation: { type: "description", description: productDetailsMeta.description },
+  }, async ({ page }, testInfo) => {
     const productPage = new ProductPage(page);
     await test.step("Verify product details", async () => {
       await expect(productPage.heading).toHaveText(product.name);
@@ -112,10 +135,17 @@ test.describe("Product page", () => {
       for (const characteristic of product.characteristics) {
         await expect(productPage.characteristics).toContainText(characteristic);
       }
+      await attachElementScreenshot(testInfo, productPage.mainImage, "Product main image");
+      await attachElementScreenshot(testInfo, productPage.productSection, "Product details and price");
+      await attachElementScreenshot(testInfo, productPage.characteristics, "Product characteristics");
     });
   });
 
-  test("product card controls are accessible and quantity never drops below one @smoke", async ({ page }, testInfo) => {
+  const productControlsMeta = getTestMeta("TC-008");
+  test(`${productControlsMeta.id} ${productControlsMeta.name}`, {
+    tag: [...getTags("TC-008"), "@smoke"],
+    annotation: { type: "description", description: productControlsMeta.description },
+  }, async ({ page }, testInfo) => {
     test.skip(testInfo.project.name === "mobile", "The mobile purchase bar omits desktop quantity controls");
     const productPage = new ProductPage(page);
     await test.step("Verify quantity starts at one and cannot drop below one", async () => {
@@ -142,10 +172,15 @@ test.describe("Product page", () => {
         expect(accessibleName).toBeTruthy();
       }
       await expect(productPage.buyButton).toHaveText(product.buyButton);
+      await attachElementScreenshot(testInfo, productPage.card, "Product card controls");
     });
   });
 
-  test("adding the product opens the cart with the correct price and quantity @smoke", async ({ page }) => {
+  const addToCartMeta = getTestMeta("TC-009");
+  test(`${addToCartMeta.id} ${addToCartMeta.name}`, {
+    tag: [...getTags("TC-009"), "@smoke"],
+    annotation: { type: "description", description: addToCartMeta.description },
+  }, async ({ page }, testInfo) => {
     const productPage = new ProductPage(page);
     const header = new HeaderComponent(page);
     const cartPage = new CartPage(page);
@@ -161,10 +196,15 @@ test.describe("Product page", () => {
       await expect(cartPage.quantityInput).toHaveValue(product.quantity.singleItem);
       await expect(cartPage.dialog.getByText(new RegExp(`${productPrice}\\s*${product.currency}`)).last())
         .toBeVisible();
+      await attachElementScreenshot(testInfo, cartPage.dialog, "Cart item and price");
     });
   });
 
-  test("footer links resolve and required notices are present", async ({ page, request }, testInfo) => {
+  const footerMeta = getTestMeta("TC-010");
+  test(`${footerMeta.id} ${footerMeta.name}`, {
+    tag: getTags("TC-010"),
+    annotation: { type: "description", description: footerMeta.description },
+  }, async ({ page, request }, testInfo) => {
     test.skip(testInfo.project.name === "mobile", "Footer navigation links are desktop-only");
     const footer = new FooterComponent(page);
     await test.step("Check footer content and linked pages", async () => {
@@ -178,19 +218,33 @@ test.describe("Product page", () => {
       }
       await expect(footer.root).toContainText(product.ageNotice);
       await expect(footer.root).toContainText(product.footer.copyright);
+      await attachElementScreenshot(testInfo, footer.root, "Footer links and legal notices");
     });
   });
 
-  test("page load has no JavaScript errors or failed first-party requests", async ({ page }) => {
+  const pageDiagnosticsMeta = getTestMeta("TC-011");
+  test(`${pageDiagnosticsMeta.id} ${pageDiagnosticsMeta.name}`, {
+    tag: getTags("TC-011"),
+    annotation: { type: "description", description: pageDiagnosticsMeta.description },
+  }, async ({ page }, testInfo) => {
     await test.step("Review browser diagnostics captured during navigation", async () => {
       expect(page.consoleErrors).toEqual([]);
       expect(page.firstPartyFailures).toEqual([]);
+      await attachElementScreenshot(
+        testInfo,
+        new ProductPage(page).heading,
+        "Page under JavaScript and network diagnostics",
+      );
     });
   });
 });
 
 test.describe("City confirmation", () => {
-  test("city popup displays and closes after confirmation", async ({ page }) => {
+  const cityConfirmationMeta = getTestMeta("TC-012");
+  test(`${cityConfirmationMeta.id} ${cityConfirmationMeta.name}`, {
+    tag: getTags("TC-012"),
+    annotation: { type: "description", description: cityConfirmationMeta.description },
+  }, async ({ page }, testInfo) => {
     await loadProduct(page);
     await dismissAgePopup(page);
     const cityQuestion = page.getByText(product.cityPopup.question, { exact: false })
@@ -199,6 +253,7 @@ test.describe("City confirmation", () => {
     await expect(page.getByRole("button", { name: product.cityPopup.confirm, exact: true }).last()).toBeVisible();
     await expect(page.getByText(product.cityPopup.change, { exact: true })
       .filter({ visible: true }).first()).toBeVisible();
+    await attachElementScreenshot(testInfo, cityQuestion, "City confirmation prompt");
     await page.locator("button.js-selected-city-confirm:visible").last().click();
     await expect(cityQuestion).toBeHidden();
   });
@@ -219,7 +274,11 @@ test.describe("Regression checks", { tag: "@regression" }, () => {
     await dismissPopups(page);
   });
 
-  test("language switch changes locale and can return to Ukrainian", async ({ page }) => {
+  const languageSwitchMeta = getTestMeta("TC-013");
+  test(`${languageSwitchMeta.id} ${languageSwitchMeta.name}`, {
+    tag: getTags("TC-013"),
+    annotation: { type: "description", description: languageSwitchMeta.description },
+  }, async ({ page }, testInfo) => {
     const header = new HeaderComponent(page);
     await header.languageMenu.click();
     await header.russianSwitch.click();
@@ -227,26 +286,47 @@ test.describe("Regression checks", { tag: "@regression" }, () => {
       .toBe(product.url.replace(/^\/ua/, ""));
     await expect(page.getByRole("heading", { level: 1 }))
       .toContainText(product.russianNameContains);
+    await attachElementScreenshot(
+      testInfo,
+      page.getByRole("heading", { level: 1 }),
+      "Russian product heading",
+    );
     await header.languageMenu.click();
     await header.ukrainianSwitch.click();
     await expect.poll(() => new URL(page.url()).pathname).toBe(product.url);
+    await attachElementScreenshot(
+      testInfo,
+      page.getByRole("heading", { level: 1 }),
+      "Ukrainian product heading after switching back",
+    );
   });
 
-  test("mobile layout opens navigation and keeps purchase action in viewport", async ({ page }, testInfo) => {
+  const mobileLayoutMeta = getTestMeta("TC-014");
+  test(`${mobileLayoutMeta.id} ${mobileLayoutMeta.name}`, {
+    tag: getTags("TC-014"),
+    annotation: { type: "description", description: mobileLayoutMeta.description },
+  }, async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== "mobile", "Runs only in the Pixel 7 project");
     const header = new HeaderComponent(page);
     const menu = header.mobileMenuButton;
     await expect(menu).toBeVisible();
     await menu.click();
     await expect(header.mobileMenu).toBeVisible();
+    await attachElementScreenshot(testInfo, header.mobileMenu, "Mobile navigation menu");
     await menu.click();
     await expect.poll(() => page.evaluate(() =>
       document.documentElement.scrollWidth <= document.documentElement.clientWidth,
     )).toBe(true);
-    await expect(new ProductPage(page).buyButton).toBeVisible();
+    const buyButton = new ProductPage(page).buyButton;
+    await expect(buyButton).toBeVisible();
+    await attachElementScreenshot(testInfo, buyButton, "Mobile purchase button");
   });
 
-  test("SEO metadata and Product structured data match the product", async ({ page }) => {
+  const seoMeta = getTestMeta("TC-015");
+  test(`${seoMeta.id} ${seoMeta.name}`, {
+    tag: getTags("TC-015"),
+    annotation: { type: "description", description: seoMeta.description },
+  }, async ({ page }, testInfo) => {
     await expect(page.locator("meta[name='description']")).toHaveAttribute("content", /\S+/);
     await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
     const price = (await new ProductPage(page).getVisiblePrice()).amount;
@@ -259,9 +339,18 @@ test.describe("Regression checks", { tag: "@regression" }, () => {
     expect(productSchema.name).toContain(product.brandName);
     expect(Number(productSchema.offers.price)).toBe(price);
     expect(productSchema.offers.priceCurrency).toBe(product.priceCurrency);
+    await attachElementScreenshot(
+      testInfo,
+      new ProductPage(page).productSection,
+      "Visible product price for structured data comparison",
+    );
   });
 
-  test("related products show imagery, prices, names, and working links", async ({ page, request }) => {
+  const relatedProductsMeta = getTestMeta("TC-016");
+  test(`${relatedProductsMeta.id} ${relatedProductsMeta.name}`, {
+    tag: getTags("TC-016"),
+    annotation: { type: "description", description: relatedProductsMeta.description },
+  }, async ({ page, request }, testInfo) => {
     const cards = page.locator("#product-page a.product-micro:visible")
       .filter({ has: page.locator("img:visible") });
     await expect(cards.first()).toBeVisible();
@@ -276,9 +365,14 @@ test.describe("Regression checks", { tag: "@regression" }, () => {
     expect(new URL(href, page.url()).origin).toBe("https://winetime.com.ua");
     const response = await request.get(href);
     expect(response.status()).toBeLessThan(400);
+    await attachElementScreenshot(testInfo, card, "Related product card");
   });
 
-  test("review area displays form validation without submitting a review", async ({ page }) => {
+  const reviewValidationMeta = getTestMeta("TC-017");
+  test(`${reviewValidationMeta.id} ${reviewValidationMeta.name}`, {
+    tag: getTags("TC-017"),
+    annotation: { type: "description", description: reviewValidationMeta.description },
+  }, async ({ page }, testInfo) => {
     const reviews = page.locator(".product-page--tab:visible")
       .filter({ hasText: product.seo.reviewSection }).first();
     await expect(reviews).toBeVisible();
@@ -298,9 +392,18 @@ test.describe("Regression checks", { tag: "@regression" }, () => {
     }).click();
     await expect(form.getByText(new RegExp(product.reviews.requiredError), { exact: false }).first())
       .toBeVisible();
+    await attachElementScreenshot(
+      testInfo,
+      form.getByText(new RegExp(product.reviews.requiredError), { exact: false }).first(),
+      "Review form validation error",
+    );
   });
 
-  test("site search returns this product", async ({ page }, testInfo) => {
+  const siteSearchMeta = getTestMeta("TC-018");
+  test(`${siteSearchMeta.id} ${siteSearchMeta.name}`, {
+    tag: getTags("TC-018"),
+    annotation: { type: "description", description: siteSearchMeta.description },
+  }, async ({ page }, testInfo) => {
     if (testInfo.project.name === "mobile") {
       await new HeaderComponent(page).mobileSearchButton.click();
     }
@@ -309,32 +412,52 @@ test.describe("Regression checks", { tag: "@regression" }, () => {
     await expect(search).toBeVisible();
     await search.fill(product.searchTerm);
     await search.press("Enter");
-    await expect(page.getByText(product.name, { exact: true }).last()).toBeVisible();
+    const result = page.getByText(product.name, { exact: true }).last();
+    await expect(result).toBeVisible();
+    await attachElementScreenshot(testInfo, result, "Search result product");
   });
 
-  test("category navigation lists the product", async ({ page }) => {
+  const categoryNavigationMeta = getTestMeta("TC-019");
+  test(`${categoryNavigationMeta.id} ${categoryNavigationMeta.name}`, {
+    tag: getTags("TC-019"),
+    annotation: { type: "description", description: categoryNavigationMeta.description },
+  }, async ({ page }, testInfo) => {
     const category = page.getByRole("link", { name: product.subcategory, exact: true }).first();
     expect(new URL(await category.getAttribute("href"), page.url()).pathname)
       .toBe(product.breadcrumbs[2].href);
     await category.click();
     await expect(page).toHaveURL(new RegExp(`${product.breadcrumbs[2].href.replaceAll("/", "\\/")}$`));
-    await expect(page.getByText(product.name, { exact: true }).first()).toBeVisible();
+    const result = page.getByText(product.name, { exact: true }).first();
+    await expect(result).toBeVisible();
+    await attachElementScreenshot(testInfo, result, "Product in category listing");
   });
 
-  test("shopping cart persists after reload and in a new tab", async ({ page, context }) => {
+  const cartPersistenceMeta = getTestMeta("TC-020");
+  test(`${cartPersistenceMeta.id} ${cartPersistenceMeta.name}`, {
+    tag: getTags("TC-020"),
+    annotation: { type: "description", description: cartPersistenceMeta.description },
+  }, async ({ page, context }, testInfo) => {
     const header = new HeaderComponent(page);
     await new ProductPage(page).buyButton.click();
     await expect(header.cartCounter).toHaveText("1");
+    await attachElementScreenshot(testInfo, header.cartCounter, "Cart counter after adding item");
     await page.reload();
     await dismissPopups(page);
     await expect(header.cartCounter).toHaveText("1");
+    await attachElementScreenshot(testInfo, header.cartCounter, "Cart counter after reload");
     const newTab = await context.newPage();
     await newTab.goto(product.url);
     await dismissPopups(newTab);
-    await expect(new HeaderComponent(newTab).cartCounter).toHaveText("1");
+    const newTabCounter = new HeaderComponent(newTab).cartCounter;
+    await expect(newTabCounter).toHaveText("1");
+    await attachElementScreenshot(testInfo, newTabCounter, "Cart counter in new tab");
   });
 
-  test("axe reports serious and critical accessibility issues", async ({ page }) => {
+  const accessibilityMeta = getTestMeta("TC-021");
+  test(`${accessibilityMeta.id} ${accessibilityMeta.name}`, {
+    tag: getTags("TC-021"),
+    annotation: { type: "description", description: accessibilityMeta.description },
+  }, async ({ page }, testInfo) => {
     const AxeBuilder = require("@axe-core/playwright");
     const accessibility = await new AxeBuilder({ page }).analyze();
     const severe = accessibility.violations.filter(violation =>
@@ -351,9 +474,18 @@ test.describe("Regression checks", { tag: "@regression" }, () => {
         description: JSON.stringify(findings),
       });
     }
+    await attachElementScreenshot(
+      testInfo,
+      new ProductPage(page).card,
+      "Product page evaluated for accessibility",
+    );
   });
 
-  test("product-card visual snapshot masks dynamic pricing and banners", async ({ page }) => {
+  const visualRegressionMeta = getTestMeta("TC-022");
+  test(`${visualRegressionMeta.id} ${visualRegressionMeta.name}`, {
+    tag: getTags("TC-022"),
+    annotation: { type: "description", description: visualRegressionMeta.description },
+  }, async ({ page }, testInfo) => {
     test.skip(test.info().project.name === "mobile", "Mobile layout has a separate responsive check");
     await expect(new ProductPage(page).card).toHaveScreenshot("product-card.png", {
       mask: [
@@ -362,9 +494,18 @@ test.describe("Regression checks", { tag: "@regression" }, () => {
       ],
       animations: "disabled",
     });
+    await attachElementScreenshot(
+      testInfo,
+      new ProductPage(page).card,
+      "Product card visual regression evidence",
+    );
   });
 
-  test("performance and product images meet smoke thresholds", async ({ page }) => {
+  const performanceMeta = getTestMeta("TC-023");
+  test(`${performanceMeta.id} ${performanceMeta.name}`, {
+    tag: getTags("TC-023"),
+    annotation: { type: "description", description: performanceMeta.description },
+  }, async ({ page }, testInfo) => {
     test.skip(!(await page.evaluate(() =>
       PerformanceObserver.supportedEntryTypes.includes("largest-contentful-paint"),
     )), "Largest Contentful Paint entry type is unsupported in this browser");
@@ -381,15 +522,26 @@ test.describe("Regression checks", { tag: "@regression" }, () => {
         )).toBe(true);
       }
     }
+    await attachElementScreenshot(
+      testInfo,
+      new ProductPage(page).mainImage,
+      "Loaded product image for performance check",
+    );
   });
 
-  test("missing product URL returns 404 with shop navigation", async ({ page }) => {
+  const missingProductMeta = getTestMeta("TC-024");
+  test(`${missingProductMeta.id} ${missingProductMeta.name}`, {
+    tag: getTags("TC-024"),
+    annotation: { type: "description", description: missingProductMeta.description },
+  }, async ({ page }, testInfo) => {
     const response = await page.goto("/ua/non-existing-product-e2e-check", {
       waitUntil: "domcontentloaded",
     });
     expect(response.status()).toBe(404);
-    await expect(page.getByRole("link", {
+    const backToShop = page.getByRole("link", {
       name: product.siteNavigation.backToShop,
-    }).first()).toBeVisible();
+    }).first();
+    await expect(backToShop).toBeVisible();
+    await attachElementScreenshot(testInfo, backToShop, "404 page shop navigation");
   });
 });

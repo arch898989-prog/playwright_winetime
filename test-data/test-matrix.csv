@@ -1,0 +1,26 @@
+﻿id,name,description,priority,area,file
+TC-001,product details are visible,Verifies the Camden Park product identity image price and characteristics.,P1,Product,camden-park-product.spec.js
+TC-002,quantity changes update totals and removing the item empties the cart,Verifies cart quantity totals and item removal.,P1,Cart,cart.spec.js
+TC-003,defaults to Kyiv and can switch to every city in the list,Verifies Kyiv is the default and every listed city can be selected.,P2,Navigation,city-switching.spec.js
+TC-004,page loads with the expected metadata,Verifies the product page responds successfully and exposes expected metadata.,P1,Product,zimmermann-chardonnay-product.spec.js
+TC-005,header navigation and contact information are visible,Verifies header navigation locale contact and cart controls.,P2,Header,zimmermann-chardonnay-product.spec.js
+TC-006,product breadcrumbs point to the expected categories,Verifies product breadcrumbs link to the expected category pages.,P2,Navigation,zimmermann-chardonnay-product.spec.js
+TC-007,"product image, price, characteristics, and availability are visible",Verifies the product image price characteristics and availability.,P1,Product,zimmermann-chardonnay-product.spec.js
+TC-008,product card controls are accessible and quantity never drops below one,Verifies product controls are accessible and quantity has a lower bound.,P1,Product,zimmermann-chardonnay-product.spec.js
+TC-009,adding the product opens the cart with the correct price and quantity,Verifies adding the product opens the cart with matching price and quantity.,P1,Cart,zimmermann-chardonnay-product.spec.js
+TC-010,footer links resolve and required notices are present,Verifies footer links resolve and legal notices are visible.,P2,Footer,zimmermann-chardonnay-product.spec.js
+TC-011,page load has no JavaScript errors or failed first-party requests,Verifies page load has no JavaScript errors or failed first-party requests.,P2,Product,zimmermann-chardonnay-product.spec.js
+TC-012,city popup displays and closes after confirmation,Verifies the city confirmation popup can be dismissed.,P2,Navigation,zimmermann-chardonnay-product.spec.js
+TC-013,language switch changes locale and can return to Ukrainian,Verifies language switching changes locale and returns to Ukrainian.,P2,Navigation,zimmermann-chardonnay-product.spec.js
+TC-014,mobile layout opens navigation and keeps purchase action in viewport,Verifies mobile navigation and purchase controls fit the viewport.,P2,Header,zimmermann-chardonnay-product.spec.js
+TC-015,SEO metadata and Product structured data match the product,Verifies page metadata and Product structured data match visible product data.,P3,SEO,zimmermann-chardonnay-product.spec.js
+TC-016,"related products show imagery, prices, names, and working links",Verifies recommended product cards show details and working links.,P2,Product,zimmermann-chardonnay-product.spec.js
+TC-017,review area displays form validation without submitting a review,Verifies empty review submission shows validation without posting a review.,P3,Reviews,zimmermann-chardonnay-product.spec.js
+TC-018,site search returns this product,Verifies site search results include the current product.,P2,Navigation,zimmermann-chardonnay-product.spec.js
+TC-019,category navigation lists the product,Verifies the alcohol-free category listing contains the current product.,P2,Navigation,zimmermann-chardonnay-product.spec.js
+TC-020,shopping cart persists after reload and in a new tab,Verifies cart contents persist after reload and in a new tab.,P2,Cart,zimmermann-chardonnay-product.spec.js
+TC-021,axe reports serious and critical accessibility issues,Reports serious and critical accessibility violations on the product page.,P3,A11y,zimmermann-chardonnay-product.spec.js
+TC-022,product-card visual snapshot masks dynamic pricing and banners,Verifies the product card against its visual snapshot.,P3,Visual,zimmermann-chardonnay-product.spec.js
+TC-023,performance and product images meet smoke thresholds,Verifies page LCP and visible product images meet smoke checks.,P3,Performance,zimmermann-chardonnay-product.spec.js
+TC-024,missing product URL returns 404 with shop navigation,Verifies a missing product URL returns 404 and offers shop navigation.,P3,Negative,zimmermann-chardonnay-product.spec.js
+TC-025,header displays all contact phone numbers,Verifies the header contact menu displays each phone number with a telephone link.,P2,Header,header-phones.spec.js

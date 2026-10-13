@@ -4,6 +4,8 @@ const { ProductPage } = require("../pages/ProductPage");
 const { HeaderComponent } = require("../pages/HeaderComponent");
 const { CartPage } = require("../pages/CartPage");
 const { dismissPopups } = require("../utils/popups");
+const { getTags, getTestMeta } = require("../utils/matrix");
+const { attachElementScreenshot } = require("../utils/test-evidence");
 
 test.describe("Cart", () => {
   test.beforeEach(async ({ page }) => {
@@ -11,7 +13,11 @@ test.describe("Cart", () => {
     await dismissPopups(page);
   });
 
-  test("quantity changes update totals and removing the item empties the cart", async ({ page }) => {
+  const meta = getTestMeta("TC-002");
+  test(`${meta.id} ${meta.name}`, {
+    tag: getTags("TC-002"),
+    annotation: { type: "description", description: meta.description },
+  }, async ({ page }, testInfo) => {
     const header = new HeaderComponent(page);
     const productPage = new ProductPage(page);
     const cartPage = new CartPage(page);
@@ -30,12 +36,14 @@ test.describe("Cart", () => {
       await cartPage.increaseButton.click();
       await expect(quantity).toHaveValue(product.quantity.increased);
       await expect(page.getByText(new RegExp(`${price * 2}\\s*${product.currency}`)).last()).toBeVisible();
+      await attachElementScreenshot(testInfo, cartPage.dialog, "Cart with quantity two and updated total");
     });
 
     await test.step("Remove the item and verify the empty cart", async () => {
       await cartPage.removeButton.click();
       await expect(header.cartCounter).toHaveText(product.quantity.emptyCart);
       await expect(cartPage.productName).toBeHidden();
+      await attachElementScreenshot(testInfo, header.cartLink, "Empty cart counter");
     });
   });
 });
