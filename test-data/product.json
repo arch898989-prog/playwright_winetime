@@ -1,0 +1,82 @@
+{
+  "url": "/ua/zimmermann-graeff-muller-michel-schneider-chardonnay-bezalkogolne",
+  "name": "Вино напівсолодке біле Zimmermann-Graeff & Muller Michel Schneider Chardonnay (безалкогольне) 0,75 л",
+  "brandName": "Zimmermann-Graeff & Muller Michel Schneider Chardonnay (безалкогольне)",
+  "russianNameContains": "Zimmermann-Graeff & Muller Michel Schneider Chardonnay",
+  "volume": "0,75 л",
+  "category": "Вино",
+  "subcategory": "Безалкогольне",
+  "breadcrumbs": [
+    { "name": "Головна", "href": "/ua" },
+    { "name": "Вино", "href": "/ua/wine" },
+    { "name": "Безалкогольне", "href": "/ua/wine/bezalkogolne" }
+  ],
+  "characteristics": ["напівсолодке", "біле", "Німеччина", "Zimmermann"],
+  "available": "В наявності",
+  "buyButton": "Купити",
+  "currency": "грн",
+  "priceCurrency": "UAH",
+  "pricePattern": "\\d[\\d\\s\\u00a0]*\\s*грн",
+  "quantity": {
+    "initial": "1",
+    "increased": "2",
+    "emptyCart": "0",
+    "singleItem": "1"
+  },
+  "copyright": "WINETIME",
+  "siteNavigation": {
+    "home": "Головна",
+    "allProducts": "Всі товари",
+    "backToShop": "На головну"
+  },
+  "language": {
+    "ukrainian": "Укр",
+    "russian": "Рус"
+  },
+  "cityPopup": {
+    "question": "Ваше місто: Київ?",
+    "confirm": "Так",
+    "change": "Обрати інший"
+  },
+  "agePopup": {
+    "question": "Вам вже виповнилось 18 років?",
+    "confirm": "Так"
+  },
+  "header": {
+    "allProducts": "Всі товари",
+    "phone": "0 800 330 370",
+    "login": "Вхід",
+    "searchPlaceholder": "Пошук товарів",
+    "cartCount": "0",
+    "workingHours": ["Пн-Пт 9:00-20:00", "Сб 10:00-18:00", "Нд 10:00-15:00"]
+  },
+  "footer": {
+    "links": [
+      { "text": "Оплата та доставка", "href": "/ua/o-dostavke" },
+      { "text": "Відгуки", "href": "/ua/vidguky" },
+      { "text": "Новини", "href": "/ua/novosti" },
+      { "text": "Про магазин", "href": "/ua/o-magazine" },
+      { "text": "Контакти", "href": "/ua/contacts" },
+      { "text": "Ліцензії", "href": "/ua/litsenzii" },
+      { "text": "Умови повернення", "href": "/ua/povernennya-tovaru" },
+      { "text": "Політика конфіденційності", "href": "/ua/politika-konfidentsialnosti" },
+      { "text": "Умови використання", "href": "/ua/usloviya-ispolzovaniya" }
+    ],
+    "ageNotice": "Ми продаємо алкоголь тільки повнолітнім",
+    "copyright": "WINETIME"
+  },
+  "seo": {
+    "titleIncludes": ["Zimmermann-Graeff", "WINETIME"],
+    "reviewSection": "Відгуки"
+  },
+  "reviews": {
+    "open": "Залишити відгук",
+    "loginTitle": "Вхід",
+    "submitButtonPattern": "відправити|надіслати|залишити відгук",
+    "requiredError": "Обов'язкове поле"
+  },
+  "ageNotice": "Ми продаємо алкоголь тільки повнолітнім",
+  "noResults": "За вашим запитом нічого не знайдено",
+  "searchTerm": "Chardonnay",
+  "performanceLimitMs": 4000
+}

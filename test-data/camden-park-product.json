@@ -1,0 +1,8 @@
+{
+  "url": "/ua/origin-wine-camden-park-cabernet-sauvignon",
+  "name": "Вино сухе червоне Origin Wine Camden Park Cabernet Sauvignon 0,75 л",
+  "volume": "0,75 л",
+  "characteristics": ["Camden Park", "червоне", "каберне совіньйон", "сухе", "Австралія"],
+  "available": "В наявності",
+  "pricePattern": "\\d[\\d\\s\\u00a0]*\\s*грн"
+}
