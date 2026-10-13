@@ -39,4 +39,42 @@ async function dismissPopups(page) {
   }
 }
 
-module.exports = { dismissAgePopup, dismissPopups };
+async function dismissNewsletterPopup(page) {
+  const newsletterPopup = page.locator(
+    '.cl-dialog[aria-label="Popup"], .cl-floating-box[aria-label="Popup"]',
+  ).filter({
+    hasText: product.newsletterPopupTitle,
+  });
+
+  if (await newsletterPopup.isVisible()) {
+    await closeNewsletterPopup(newsletterPopup);
+  }
+}
+
+async function closeNewsletterPopup(newsletterPopup) {
+  const closeButton = newsletterPopup.locator(
+    ".cl-dialog-close-icon, .cl-floating-box-close-icon",
+  );
+  await expect(closeButton).toBeVisible();
+  await closeButton.evaluate(element => element.click());
+  await expect(newsletterPopup).toBeHidden();
+}
+
+function registerNewsletterPopupHandler(page) {
+  const newsletterPopup = page.locator(
+    '.cl-dialog[aria-label="Popup"], .cl-floating-box[aria-label="Popup"]',
+  ).filter({
+    hasText: product.newsletterPopupTitle,
+  });
+
+  page.addLocatorHandler(newsletterPopup, async popup => {
+    await closeNewsletterPopup(popup);
+  });
+}
+
+module.exports = {
+  dismissAgePopup,
+  dismissNewsletterPopup,
+  dismissPopups,
+  registerNewsletterPopupHandler,
+};

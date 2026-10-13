@@ -23,7 +23,7 @@ module.exports = defineConfig({
     locale: "uk-UA",
     timezoneId: "Europe/Kiev",
     trace: "on-first-retry",
-    screenshot: "only-on-failure",
+    screenshot: "on",
     video: "retain-on-failure",
   },
   projects: [
@@ -37,6 +37,10 @@ module.exports = defineConfig({
         ...devices["Desktop Firefox"],
         timezoneId: "Europe/Kyiv",
       },
+    },
+    {
+      name: "tablet",
+      use: { ...devices["iPad (gen 7)"], browserName: "chromium" },
     },
     {
       name: "mobile",

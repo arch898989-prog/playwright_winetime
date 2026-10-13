@@ -1,9 +1,15 @@
 const { test, expect } = require("@playwright/test");
 const product = require("../test-data/camden-park-product.json");
 const { dismissPopups } = require("../utils/popups");
+const { getTags, getTestMeta } = require("../utils/matrix");
+const { attachElementScreenshot } = require("../utils/test-evidence");
 
 test.describe("Camden Park product page", () => {
-  test("product details are visible", async ({ page }, testInfo) => {
+  const meta = getTestMeta("TC-001");
+  test(`${meta.id} ${meta.name}`, {
+    tag: getTags("TC-001"),
+    annotation: { type: "description", description: meta.description },
+  }, async ({ page }, testInfo) => {
     const response = await page.goto(product.url, { waitUntil: "domcontentloaded" });
     expect(response.status()).toBe(200);
     await dismissPopups(page);
@@ -40,6 +46,8 @@ test.describe("Camden Park product page", () => {
       } else {
         await expect(productSection).toContainText(product.available);
       }
+      await attachElementScreenshot(testInfo, mainImage, "Camden Park product image");
+      await attachElementScreenshot(testInfo, productSection, "Camden Park product details");
     });
   });
 });

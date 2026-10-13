@@ -42,9 +42,20 @@
     "question": "Вам вже виповнилось 18 років?",
     "confirm": "Так"
   },
+  "newsletterPopupTitle": "Беріть від життя найсмачніше!",
   "header": {
     "allProducts": "Всі товари",
     "phone": "0 800 330 370",
+    "phoneDropdownLabel": "Безкоштовно по Україні!",
+    "additionalPhones": [
+      "+38 067 239 90 97",
+      "+38 050 315 37 37",
+      "+38 093 957 68 97"
+    ],
+    "mobileMenuPhones": [
+      "0 800 330 370",
+      "+38 067 239 90 97"
+    ],
     "login": "Вхід",
     "searchPlaceholder": "Пошук товарів",
     "cartCount": "0",
