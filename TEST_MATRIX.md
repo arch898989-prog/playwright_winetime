@@ -21,6 +21,8 @@
 | TC-019 | category navigation lists the product | Verifies the alcohol-free category listing contains the current product. | P2 | Navigation |
 | TC-020 | shopping cart persists after reload and in a new tab | Verifies cart contents persist after reload and in a new tab. | P2 | Cart |
 | TC-025 | header displays all contact phone numbers | Verifies the header contact menu displays each phone number with a telephone link. | P2 | Header |
+| TC-026 | store hours are displayed for weekdays and weekends | Verifies the weekday and weekend opening hours are visible in the footer. | P2 | Footer |
+| TC-027 | contacts page displays phone email and store information | Verifies the contacts page displays consultation numbers, emails, opening hours, and a store listing. | P2 | Contacts |
 | TC-015 | SEO metadata and Product structured data match the product | Verifies page metadata and Product structured data match visible product data. | P3 | SEO |
 | TC-017 | review area displays form validation without submitting a review | Verifies empty review submission shows validation without posting a review. | P3 | Reviews |
 | TC-021 | axe reports serious and critical accessibility issues | Reports serious and critical accessibility violations on the product page. | P3 | A11y |
@@ -31,6 +33,6 @@
 ## Summary
 
 - P1: 6
-- P2: 13
+- P2: 15
 - P3: 6
-- Total: 25
+- Total: 27

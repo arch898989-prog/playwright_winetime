@@ -24,3 +24,5 @@ TC-022,product-card visual snapshot masks dynamic pricing and banners,Verifies t
 TC-023,performance and product images meet smoke thresholds,Verifies page LCP and visible product images meet smoke checks.,P3,Performance,zimmermann-chardonnay-product.spec.js
 TC-024,missing product URL returns 404 with shop navigation,Verifies a missing product URL returns 404 and offers shop navigation.,P3,Negative,zimmermann-chardonnay-product.spec.js
 TC-025,header displays all contact phone numbers,Verifies the header contact menu displays each phone number with a telephone link.,P2,Header,header-phones.spec.js
+TC-026,store hours are displayed for weekdays and weekends,Verifies the weekday and weekend opening hours are visible in the footer.,P2,Footer,working-hours.spec.js
+TC-027,contacts page displays phone email and store information,"Verifies the contacts page displays consultation numbers, emails, opening hours, and a store listing.",P2,Contacts,contacts-page.spec.js

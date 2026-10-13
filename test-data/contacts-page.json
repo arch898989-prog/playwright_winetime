@@ -1,0 +1,17 @@
+{
+  "url": "/ua/contacts",
+  "title": "Контакти магазинів WINETIME офлайн",
+  "heading": "Контакти",
+  "consultationPhones": [
+    "0 800 330 370",
+    "+38 067 239 90 97",
+    "+38 050 315 37 37",
+    "+38 093 957 68 97"
+  ],
+  "businessEmails": [
+    "commercial@wteam.com.ua",
+    "quality@wteam.com.ua"
+  ],
+  "workingHoursLabel": "Час роботи",
+  "storeHoursLabel": "Час роботи:"
+}
