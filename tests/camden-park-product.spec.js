@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const product = require("../test-data/camden-park-product.json");
+const { ProductPage } = require("../pages/ProductPage");
 const { dismissPopups } = require("../utils/popups");
 const { getTags, getTestMeta } = require("../utils/matrix");
 const { attachElementScreenshot } = require("../utils/test-evidence");
@@ -14,14 +15,14 @@ test.describe("Camden Park product page", () => {
     expect(response.status()).toBe(200);
     await dismissPopups(page);
 
-    const heading = page.getByRole("heading", { level: 1, name: product.name });
-    const productSection = page.locator("#product-page .product-page--right-column")
-      .filter({ has: heading });
-    const mainImage = page.locator("#product-page .product--gallery--slide img").first();
-    const characteristics = page.locator("#product-page .properties-table");
+    const productPage = new ProductPage(page, product);
+    const heading = productPage.heading;
+    const productSection = productPage.productDetails;
+    const mainImage = productPage.mainImage;
+    const characteristics = productPage.characteristics;
     const price = testInfo.project.name === "mobile"
-      ? page.locator(".j-pv-10-xs.j-mt-20 .j-weight-600-xs")
-      : productSection.locator(".j-weight-600-xs").first();
+      ? productPage.mobilePrice
+      : productPage.price;
 
     await test.step("Verify product identity, image, price, and characteristics", async () => {
       await expect(page).toHaveURL(`https://winetime.com.ua${product.url}`);

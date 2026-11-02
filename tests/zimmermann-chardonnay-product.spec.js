@@ -1,9 +1,12 @@
 const { test, expect } = require("@playwright/test");
 const product = require("../test-data/product.json");
 const { ProductPage } = require("../pages/ProductPage");
-const { CartPage } = require("../pages/CartPage");
+const { CartComponent } = require("../pages/CartComponent");
 const { HeaderComponent } = require("../pages/HeaderComponent");
 const { FooterComponent } = require("../pages/FooterComponent");
+const { CityConfirmationComponent } = require("../pages/CityConfirmationComponent");
+const { RelatedProductsComponent } = require("../pages/RelatedProductsComponent");
+const { ReviewsComponent } = require("../pages/ReviewsComponent");
 const { dismissAgePopup, dismissPopups } = require("../utils/popups");
 const { getTags, getTestMeta } = require("../utils/matrix");
 const { attachElementScreenshot } = require("../utils/test-evidence");
@@ -183,20 +186,20 @@ test.describe("Product page", () => {
   }, async ({ page }, testInfo) => {
     const productPage = new ProductPage(page);
     const header = new HeaderComponent(page);
-    const cartPage = new CartPage(page);
+    const cart = new CartComponent(page);
     await test.step("Add one item and verify the cart", async () => {
       const productPrice = (await productPage.getVisiblePrice()).amount;
       await productPage.buyButton.click();
       await expect(header.cartCounter).toHaveText("1");
-      await cartPage.open();
-      await expect(cartPage.productName).toBeVisible();
-      await expect(cartPage.productName).toContainText(product.name);
-      expect(new URL(await cartPage.productName.getAttribute("href"), page.url()).pathname)
+      await cart.open();
+      await expect(cart.productName).toBeVisible();
+      await expect(cart.productName).toContainText(product.name);
+      expect(new URL(await cart.productName.getAttribute("href"), page.url()).pathname)
         .toBe(product.url);
-      await expect(cartPage.quantityInput).toHaveValue(product.quantity.singleItem);
-      await expect(cartPage.dialog.getByText(new RegExp(`${productPrice}\\s*${product.currency}`)).last())
+      await expect(cart.quantityInput).toHaveValue(product.quantity.singleItem);
+      await expect(cart.dialog.getByText(new RegExp(`${productPrice}\\s*${product.currency}`)).last())
         .toBeVisible();
-      await attachElementScreenshot(testInfo, cartPage.dialog, "Cart item and price");
+      await attachElementScreenshot(testInfo, cart.dialog, "Cart item and price");
     });
   });
 
@@ -247,15 +250,13 @@ test.describe("City confirmation", () => {
   }, async ({ page }, testInfo) => {
     await loadProduct(page);
     await dismissAgePopup(page);
-    const cityQuestion = page.getByText(product.cityPopup.question, { exact: false })
-      .filter({ visible: true }).first();
-    await expect(cityQuestion).toBeVisible();
-    await expect(page.getByRole("button", { name: product.cityPopup.confirm, exact: true }).last()).toBeVisible();
-    await expect(page.getByText(product.cityPopup.change, { exact: true })
-      .filter({ visible: true }).first()).toBeVisible();
-    await attachElementScreenshot(testInfo, cityQuestion, "City confirmation prompt");
-    await page.locator("button.js-selected-city-confirm:visible").last().click();
-    await expect(cityQuestion).toBeHidden();
+    const cityConfirmation = new CityConfirmationComponent(page);
+    await expect(cityConfirmation.question).toBeVisible();
+    await expect(cityConfirmation.confirmButton).toBeVisible();
+    await expect(cityConfirmation.changeLink).toBeVisible();
+    await attachElementScreenshot(testInfo, cityConfirmation.question, "City confirmation prompt");
+    await cityConfirmation.confirmButton.click();
+    await expect(cityConfirmation.question).toBeHidden();
   });
 });
 
@@ -351,12 +352,11 @@ test.describe("Regression checks", { tag: "@regression" }, () => {
     tag: getTags("TC-016"),
     annotation: { type: "description", description: relatedProductsMeta.description },
   }, async ({ page, request }, testInfo) => {
-    const cards = page.locator("#product-page a.product-micro:visible")
-      .filter({ has: page.locator("img:visible") });
-    await expect(cards.first()).toBeVisible();
-    const count = await cards.count();
+    const relatedProducts = new RelatedProductsComponent(page);
+    await expect(relatedProducts.firstCard).toBeVisible();
+    const count = await relatedProducts.cards.count();
     expect(count).toBeGreaterThan(0);
-    const card = cards.first();
+    const card = relatedProducts.firstCard;
     await expect(card.locator("img").first()).toBeVisible();
     await expect(card).toContainText(new RegExp(product.pricePattern));
     await expect(card).toContainText(/\S+/);
@@ -373,30 +373,17 @@ test.describe("Regression checks", { tag: "@regression" }, () => {
     tag: getTags("TC-017"),
     annotation: { type: "description", description: reviewValidationMeta.description },
   }, async ({ page }, testInfo) => {
-    const reviews = page.locator(".product-page--tab:visible")
-      .filter({ hasText: product.seo.reviewSection }).first();
-    await expect(reviews).toBeVisible();
-    await reviews.click();
-    await page.getByRole("button", { name: product.reviews.open }).click();
-    const form = page.locator("form").filter({
-      has: page.getByRole("button", {
-        name: new RegExp(product.reviews.submitButtonPattern, "i"),
-      }),
-    }).first();
-    if (!(await form.count())) {
-      await expect(page.getByText(product.reviews.loginTitle, { exact: true }).last()).toBeVisible();
+    const reviews = new ReviewsComponent(page);
+    await expect(reviews.tab).toBeVisible();
+    await reviews.tab.click();
+    await reviews.openButton.click();
+    if (!(await reviews.form.count())) {
+      await expect(reviews.loginTitle).toBeVisible();
       test.skip(true, "Review form is gated by authentication; no credentials are used");
     }
-    await form.getByRole("button", {
-      name: new RegExp(product.reviews.submitButtonPattern, "i"),
-    }).click();
-    await expect(form.getByText(new RegExp(product.reviews.requiredError), { exact: false }).first())
-      .toBeVisible();
-    await attachElementScreenshot(
-      testInfo,
-      form.getByText(new RegExp(product.reviews.requiredError), { exact: false }).first(),
-      "Review form validation error",
-    );
+    await reviews.submitButton.click();
+    await expect(reviews.validationError).toBeVisible();
+    await attachElementScreenshot(testInfo, reviews.validationError, "Review form validation error");
   });
 
   const siteSearchMeta = getTestMeta("TC-018");

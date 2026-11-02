@@ -1,8 +1,9 @@
 const product = require("../test-data/product.json");
 
 class ProductPage {
-  constructor(page) {
+  constructor(page, productData = product) {
     this.page = page;
+    this.product = productData;
   }
 
   get card() {
@@ -11,8 +12,12 @@ class ProductPage {
 
   get productSection() {
     return this.page.locator("#product-page section").filter({
-      has: this.page.getByRole("heading", { level: 1, name: product.name }),
+      has: this.page.getByRole("heading", { level: 1, name: this.product.name }),
     }).first();
+  }
+
+  get productDetails() {
+    return this.page.locator("#product-page").filter({ has: this.heading });
   }
 
   get heading() {
@@ -25,14 +30,18 @@ class ProductPage {
 
   get buyButton() {
     return this.productSection.getByRole("button", {
-      name: product.buyButton,
+      name: this.product.buyButton,
       exact: true,
     }).first();
   }
 
   get price() {
-    return this.productSection.locator(".j-weight-600-xs")
-      .filter({ hasText: product.currency }).first();
+    return this.page.locator("#product-page .j-weight-600-xs:visible")
+      .filter({ hasText: this.product.currency }).first();
+  }
+
+  get mobilePrice() {
+    return this.page.locator(".j-pv-10-xs.j-mt-20 .j-weight-600-xs");
   }
 
   get characteristics() {
@@ -56,7 +65,8 @@ class ProductPage {
   }
 
   async getVisiblePrice() {
-    const text = await this.price.innerText();
+    const price = (await this.card.isVisible()) ? this.price : this.mobilePrice;
+    const text = await price.innerText();
     const amount = Number(text.replace(/[^\d,.-]/g, "").replace(",", "."));
     return { text, amount };
   }

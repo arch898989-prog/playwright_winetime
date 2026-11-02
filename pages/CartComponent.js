@@ -1,6 +1,6 @@
 const product = require("../test-data/product.json");
 
-class CartPage {
+class CartComponent {
   constructor(page) {
     this.page = page;
   }
@@ -46,4 +46,4 @@ class CartPage {
   }
 }
 
-module.exports = { CartPage };
+module.exports = { CartComponent };
