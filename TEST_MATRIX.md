@@ -10,6 +10,7 @@
 | TC-009 | adding the product opens the cart with the correct price and quantity | Verifies adding the product opens the cart with matching price and quantity. | P1 | Cart |
 | TC-028 | bakery page displays its introduction and product catalog | Verifies the Zhornova bakery page displays its brand introduction and product catalog. | P1 | Product |
 | TC-029 | brewery page displays its introduction and product catalog | Verifies the John Barleycorn brewery page displays its introduction and product catalog. | P1 | Product |
+| TC-030 | farm page displays its introduction and product catalog | Verifies the Trostynka farm page displays its introduction and product catalog. | P1 | Product |
 | TC-003 | defaults to Kyiv and can switch to every city in the list | Verifies Kyiv is the default and every listed city can be selected. | P2 | Navigation |
 | TC-005 | header navigation and contact information are visible | Verifies header navigation locale contact and cart controls. | P2 | Header |
 | TC-006 | product breadcrumbs point to the expected categories | Verifies product breadcrumbs link to the expected category pages. | P2 | Navigation |
@@ -34,7 +35,7 @@
 
 ## Summary
 
-- P1: 8
+- P1: 9
 - P2: 15
 - P3: 6
-- Total: 29
+- Total: 30

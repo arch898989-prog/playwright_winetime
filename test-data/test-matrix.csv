@@ -28,3 +28,4 @@ TC-026,store hours are displayed for weekdays and weekends,Verifies the weekday 
 TC-027,contacts page displays phone email and store information,"Verifies the contacts page displays consultation numbers, emails, opening hours, and a store listing.",P2,Contacts,contacts-page.spec.js
 TC-028,bakery page displays its introduction and product catalog,Verifies the Zhornova bakery page displays its brand introduction and product catalog.,P1,Product,zhornova-bakery-page.spec.js
 TC-029,brewery page displays its introduction and product catalog,Verifies the John Barleycorn brewery page displays its introduction and product catalog.,P1,Product,john-barleycorn-brewery-page.spec.js
+TC-030,farm page displays its introduction and product catalog,Verifies the Trostynka farm page displays its introduction and product catalog.,P1,Product,trostynka-farm-page.spec.js

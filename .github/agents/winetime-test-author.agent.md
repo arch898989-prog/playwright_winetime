@@ -27,8 +27,13 @@ responsive coverage, screenshot evidence, and validation.
   merely because its responsive UI differs.
 - Run matrix validation and the smallest relevant test command.
 - After making any code changes, invoke the `code_review` subagent to review
-  the complete change set before reporting completion. Wait for its findings;
-  if you make further code changes in response, run `code_review` again.
+  the complete change set before reporting completion. Because the reviewer
+  runs in an isolated context, include a review bundle in the delegation prompt:
+  the review scope, a scoped `git diff`, the complete current contents of every
+  changed or untracked file in scope, and directly relevant context where needed.
+  Do not assume the reviewer shares this chat's workspace or can execute Git
+  commands. Wait for its findings; if you make further code changes in response,
+  send an updated bundle and run `code_review` again.
 - Never run the entire test suite without first asking the user for explicit
   permission and waiting for their answer.
 - Do not place orders, submit real reviews, or use login credentials.
