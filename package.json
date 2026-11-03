@@ -22,11 +22,20 @@
     "test:ui": "playwright test --ui",
     "matrix": "node scripts/generate-matrix.js",
     "matrix:check": "node utils/validate-matrix.js",
-    "report": "playwright show-report"
+    "report": "playwright show-report",
+    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",
     "@playwright/test": "^1.56.1",
+    "allure": "^3.22.1",
+    "allure-playwright": "^3.14.0",
     "csv-parse": "^7.0.3"
+  },
+  "overrides": {
+    "dompurify": "^3.4.17",
+    "glob": "^14.0.3",
+    "minimatch": "^11.0.4"
   }
 }

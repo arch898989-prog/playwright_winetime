@@ -28,6 +28,8 @@ npm.cmd run test:smoke
 npm.cmd run test:headed
 npm.cmd run test:ui
 npm.cmd run report
+npm.cmd run allure:generate
+npm.cmd run allure:open
 ```
 
 The list reporter prints test progress in the terminal as tests execute. The
@@ -36,6 +38,11 @@ in the single `playwright-report/` directory: each run adds an
 `index-<UTC timestamp>.html` file, while `index.html` always points to the
 latest run. `npm.cmd run report` opens the latest report; open a timestamped
 HTML file from that directory to view an older run.
+
+Allure results are also collected for each test run in `allure-results/`.
+After running tests, generate the Allure Report with
+`npm.cmd run allure:generate`, then open it with `npm.cmd run allure:open`.
+The generated report and raw result files are ignored by Git.
 
 To run only the Camden Park spec in PowerShell, pass its filename as the
 Playwright test filter (without the `tests\` prefix):

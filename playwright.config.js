@@ -11,6 +11,7 @@ module.exports = defineConfig({
   workers: 2,
   reporter: [
     ["list"],
+    ["allure-playwright", { outputFolder: "allure-results" }],
     ["html", { outputFolder: reportStagingDirectory, open: "never" }],
     ["./utils/highlight-failures-reporter.js", {
       outputFolder: reportStagingDirectory,

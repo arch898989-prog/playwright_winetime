@@ -26,3 +26,4 @@ TC-024,missing product URL returns 404 with shop navigation,Verifies a missing p
 TC-025,header displays all contact phone numbers,Verifies the header contact menu displays each phone number with a telephone link.,P2,Header,header-phones.spec.js
 TC-026,store hours are displayed for weekdays and weekends,Verifies the weekday and weekend opening hours are visible in the footer.,P2,Footer,working-hours.spec.js
 TC-027,contacts page displays phone email and store information,"Verifies the contacts page displays consultation numbers, emails, opening hours, and a store listing.",P2,Contacts,contacts-page.spec.js
+TC-028,bakery page displays its introduction and product catalog,Verifies the Zhornova bakery page displays its brand introduction and product catalog.,P1,Product,zhornova-bakery-page.spec.js

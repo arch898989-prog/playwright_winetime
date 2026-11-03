@@ -8,6 +8,7 @@
 | TC-007 | product image, price, characteristics, and availability are visible | Verifies the product image price characteristics and availability. | P1 | Product |
 | TC-008 | product card controls are accessible and quantity never drops below one | Verifies product controls are accessible and quantity has a lower bound. | P1 | Product |
 | TC-009 | adding the product opens the cart with the correct price and quantity | Verifies adding the product opens the cart with matching price and quantity. | P1 | Cart |
+| TC-028 | bakery page displays its introduction and product catalog | Verifies the Zhornova bakery page displays its brand introduction and product catalog. | P1 | Product |
 | TC-003 | defaults to Kyiv and can switch to every city in the list | Verifies Kyiv is the default and every listed city can be selected. | P2 | Navigation |
 | TC-005 | header navigation and contact information are visible | Verifies header navigation locale contact and cart controls. | P2 | Header |
 | TC-006 | product breadcrumbs point to the expected categories | Verifies product breadcrumbs link to the expected category pages. | P2 | Navigation |
@@ -32,7 +33,7 @@
 
 ## Summary
 
-- P1: 6
+- P1: 7
 - P2: 15
 - P3: 6
-- Total: 27
+- Total: 28
